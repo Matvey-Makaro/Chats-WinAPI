@@ -5,16 +5,20 @@
 class SocketWrapper
 {
 public:
-  SocketWrapper(SOCKET socket);
+  SocketWrapper(SOCKET socket = INVALID_SOCKET);
   ~SocketWrapper();
 
   SocketWrapper(const SocketWrapper& other) = delete;
   SocketWrapper& operator=(const SocketWrapper& other) = delete;
 
-  SocketWrapper(SocketWrapper&& other);
-  SocketWrapper& operator=(SocketWrapper&& other);
+  SocketWrapper(SocketWrapper&& other) noexcept;
+  SocketWrapper& operator=(SocketWrapper&& other) noexcept;
 
-  operator SOCKET() const;  // TODO: Или сделать метод get().
+  SocketWrapper& operator=(SOCKET socket);
+
+
+
+  operator SOCKET() const;  // TODO: Or make a get() method.
 
 private:
   SOCKET _socket;

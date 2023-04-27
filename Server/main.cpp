@@ -1,9 +1,12 @@
+#include "server.h"
+
 #include <iostream>
 using namespace std;
 
 int main()
 {
-  cout << "Hello world! " << endl;
+  Server s(8888);
+  s.run();
 
   return 0;
 }

@@ -7,8 +7,8 @@ using namespace std;
 SocketWrapper::SocketWrapper(SOCKET socket) :
   _socket(socket)
 {
-  if (_socket == INVALID_SOCKET)
-    throw runtime_error("Socket creation failed! " + std::to_string(WSAGetLastError()));
+  /*if (_socket == INVALID_SOCKET)
+    throw runtime_error("Socket creation failed! " + std::to_string(WSAGetLastError()));*/
 }
 
 SocketWrapper::~SocketWrapper()
@@ -16,22 +16,29 @@ SocketWrapper::~SocketWrapper()
   closesocket(_socket);
 }
 
-SocketWrapper::SocketWrapper(SocketWrapper&& other) :
+SocketWrapper::SocketWrapper(SocketWrapper&& other) noexcept :
   _socket(other._socket)
 {
-  // TODO: Подумать о том, может добавить флаг valid в класс, а не просто other присваивать INVALID_SOCKET.
   other._socket = INVALID_SOCKET;
 }
 
-SocketWrapper& SocketWrapper::operator=(SocketWrapper&& other)
+SocketWrapper& SocketWrapper::operator=(SocketWrapper&& other) noexcept
 {
-  // TODO: Подумать о том, может добавить флаг valid в класс, а не просто other присваивать INVALID_SOCKET.
   if (this == &other)
     return *this;
 
   _socket = other._socket;
   other._socket = INVALID_SOCKET;
 
+  return *this;
+}
+
+SocketWrapper& SocketWrapper::operator=(SOCKET socket)
+{
+  if (_socket != INVALID_SOCKET)
+    closesocket(_socket);
+
+  _socket = socket;
   return *this;
 }
 
